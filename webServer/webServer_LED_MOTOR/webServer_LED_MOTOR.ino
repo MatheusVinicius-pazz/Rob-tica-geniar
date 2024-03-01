@@ -13,10 +13,12 @@ int led = 2;
 String sliderValueMotor = "0";
 String sliderValueLed = "0";
 
+// configuração PWM do motor 
 const int freq = 30000;
 const int canalPWM = 0;
 const int resolution = 8;
 
+// configuração PWM do led
 const int freqLed = 5000;
 const int canalLed = 1;
 const int resolutionLed = 8;
@@ -124,7 +126,7 @@ void setup() {
 
 
     //String sliderUpdate = String(sliderValueMotor.toInt());
-    Serial.println("Motor: " + sliderValueMotor);
+    Serial.println("MOTOR: " + sliderValueMotor);
     request->send(200, "text/plain", sliderValueMotor);
   });
 
