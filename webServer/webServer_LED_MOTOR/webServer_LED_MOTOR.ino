@@ -18,11 +18,11 @@ const int canalPWM = 0;
 const int resolution = 8;
 
 const int freqLed = 5000;
-const int canalLed = 1; 
+const int canalLed = 1;
 const int resolutionLed = 8;
 
 const char* PARAM_INPUT = "value";
-int velocidade = 0; 
+int velocidade = 0;
 
 AsyncWebServer server(80);
 
@@ -121,10 +121,10 @@ void setup() {
     } else {
       inputMessageMotor = "No message sent";
     }
-    
-    
+
+
     //String sliderUpdate = String(sliderValueMotor.toInt());
-    Serial.println("Motor: " + sliderValueMotor );
+    Serial.println("Motor: " + sliderValueMotor);
     request->send(200, "text/plain", sliderValueMotor);
   });
 
@@ -148,6 +148,4 @@ void loop() {
   digitalWrite(motorA1, LOW);
   digitalWrite(motorA2, HIGH);
   velocidade = sliderValueMotor.toInt();
-  
 }
-
