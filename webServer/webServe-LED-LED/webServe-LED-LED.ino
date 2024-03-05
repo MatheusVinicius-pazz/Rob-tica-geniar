@@ -19,7 +19,7 @@ const int canalPWM = 0;
 const int resolution = 8;
 
 // configuração PWM do led
-const int freqLed = 5000;
+const int freqLed = 30000;
 const int canalLed = 1;
 const int resolutionLed = 8;
 
