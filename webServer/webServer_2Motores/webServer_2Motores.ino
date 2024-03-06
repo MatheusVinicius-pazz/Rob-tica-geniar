@@ -25,11 +25,10 @@ const int resolution = 8;
 const int freq2 = 30000;
 const int canalPWM2 = 1;
 const int resolution2 = 8;
-;
+
 
 const char* PARAM_INPUT = "value";
-int velocidadeM1 = 0;
-int velocidadeM2 = 0;
+
 AsyncWebServer server(80);
 
 const char index_html[] PROGMEM = R"rawliteral(
@@ -48,8 +47,8 @@ const char index_html[] PROGMEM = R"rawliteral(
     .slider::-moz-range-thumb { width: 35px; height: 35px; background: #003249; cursor: pointer; } 
     .slider2 { -webkit-appearance: none; margin: 14px; width: 360px; height: 25px; background: #FF0000;
       outline: none; -webkit-transition: .2s; transition: opacity .2s;}
-    .slider::-webkit-slider-thumb {-webkit-appearance: none; appearance: none; width: 35px; height: 35px; background: #003249; cursor: pointer;}
-    .slider::-moz-range-thumb { width: 35px; height: 35px; background: #003249; cursor: pointer; }
+    .slider2::-webkit-slider-thumb {-webkit-appearance: none; appearance: none; width: 35px; height: 35px; background: #003249; cursor: pointer;}
+    .slider2::-moz-range-thumb { width: 35px; height: 35px; background: #003249; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -133,7 +132,7 @@ void setup() {
       inputMessageMotor = request->getParam(PARAM_INPUT)->value();
       sliderValueMotor = inputMessageMotor;
       ledcWrite(canalPWM, sliderValueMotor.toInt());
-       ledcWrite(motorA2, sliderValueMotor2.toInt());
+      ledcWrite(motorA2, sliderValueMotor2.toInt());
     } else {
       inputMessageMotor = "No message sent";
     }
@@ -150,39 +149,22 @@ void setup() {
       inputMessageMotor2 = request->getParam(PARAM_INPUT)->value();
       sliderValueMotor2 = inputMessageMotor2;
       ledcWrite(canalPWM2, sliderValueMotor2.toInt());
-     
+
     } else {
       inputMessageMotor2 = "No message sent";
     }
     Serial.println("MOTOR 2: " + sliderValueMotor2);
-   
   });
 
   server.begin();
 }
 
 void loop() {
- // Controlar o motor A
-  if (sliderValueMotor.toInt() > 0) {
-    digitalWrite(motorA1, HIGH);
-    digitalWrite(motorA2, LOW);
-    ledcWrite(canalPWM, sliderValueMotor.toInt());
-  } else {
-    digitalWrite(motorA1, LOW);
-    digitalWrite(motorA2, LOW);
-    ledcWrite(canalPWM, 0);
-  }
+  digitalWrite(motorA1, LOW);
+  digitalWrite(motorA2, HIGH);
 
-  // Controlar o motor B
-  if (sliderValueMotor2.toInt() > 0) {
-    digitalWrite(motorB1, HIGH);
-    digitalWrite(motorB2, LOW);
-    ledcWrite(canalPWM2, sliderValueMotor2.toInt());
-  } else {
-    digitalWrite(motorB1, LOW);
-    digitalWrite(motorB2, LOW);
-    ledcWrite(canalPWM2, 0);
-  }
+
+  digitalWrite(motorB1, LOW);
+  digitalWrite(motorB2, HIGH);
+ 
 }
-  
-
