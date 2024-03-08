@@ -8,7 +8,7 @@ const char* password = "ifalriolargo";
 int motorA1 = 25;
 int motorA2 = 14;
 int enablePin = 27;
-int led = 26;
+int led = 2;
 
 String sliderValueMotor = "0";
 String sliderValueLed = "0";

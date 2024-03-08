@@ -19,6 +19,8 @@ int resolution2 = 8;
 void setup() {
   pinMode(motorA1, OUTPUT);
   pinMode(motorA2, OUTPUT);
+ pinMode(motorB1, OUTPUT);
+  pinMode(motorB2, OUTPUT);
 
   ledcSetup(canalPWM, freq, resolution);
   ledcSetup(canalPWM2, freq2, resolution2);
@@ -34,6 +36,7 @@ void loop(){
   ledcAttachPin(motorA1, canalPWM);
   ledcWrite(canalPWM, 100);
   digitalWrite(motorA2, LOW);
+
 
   ledcAttachPin(motorB1, canalPWM2);
   ledcWrite(canalPWM2, 100);
