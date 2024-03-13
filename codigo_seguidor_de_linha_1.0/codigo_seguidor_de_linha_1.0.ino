@@ -14,17 +14,20 @@ const char* host = "esp32";
 const char* ssid = "IFAL - Rio Largo";
 const char* password = "ifalriolargo";
 
-int motorA1 = 25;
-int motorA2 = 26;
+int motorA1 = 25;  //M1
+int motorA2 = 26;  //M1
 
-int motorB1 = 12;
-int motorB2 = 14;
-int sensor1 = 32;
-int sensor2 = 35;
+int motorB1 = 12;  //M2
+int motorB2 = 14;  //M2
+
+int sensor1 = 35;
+int sensor2 = 32;
 
 int valorSensor1;
 int valorSensor2;
-int velocidade = 70;
+int velocidade = 80;
+
+unsigned long ultimoTempo = 0;
 
 //int luminosidade = 30000;
 
@@ -211,18 +214,29 @@ void setup(void) {
 }
 
 void loop(void) {
-  server.handleClient();
-  delay(1);
+  // server.handleClient();
+  // delay(1);
 
+  if (millis() - ultimoTempo > 10) {
 
+    leituraSensores();  //sensores
 
+    if (valorSensor1 == 1 && valorSensor2 == 0) {  //sensor 1 no preto - sensor 2 branco => girar motor 1
+      esquerda();
+    }
 
+    else if (valorSensor1 == 0 && valorSensor2 == 1) {  //sensor 1 no preto - sensor 2 branco => girar motor 1
+      direita();
+    }
 
-  //sensores
+    else {
+      frente();
+    }
 
-  valorSensor1 = !digitalRead(sensor1);
-  valorSensor2 = digitalRead(sensor2);
+    //parado();
 
+    ultimoTempo = millis();
+  }
 
 
 
@@ -230,6 +244,40 @@ void loop(void) {
   //Serial.println(valorSensor2);
   //delay(2000);
 
+  /*
+  if (valorSensor1 == 1 && valorSensor2 == 1) {
+    ledcAttachPin(motorA2, canalPWM);
+    ledcWrite(canalPWM, velocidade);
+    digitalWrite(motorA1, LOW);
+
+    ledcAttachPin(motorB1, canalPWM2);
+    ledcWrite(canalPWM2, velocidade);
+    digitalWrite(motorB2, LOW);
+  }
+
+  if (valorSensor1 == 0 && valorSensor2 == 0) {
+    ledcDetachPin(motorA1);
+    ledcDetachPin(motorA2);
+    ledcDetachPin(motorB1);
+    ledcDetachPin(motorB2);
+  }
+
+  if (valorSensor1 == 1 && valorSensor2 == 0) {
+    ledcAttachPin(motorB1, canalPWM2);
+    ledcWrite(canalPWM2, velocidade);
+    digitalWrite(motorB2, LOW);
+
+    ledcDetachPin(motorA1);
+    ledcDetachPin(motorA2);
+  }
+  if (valorSensor1 == 0 && valorSensor2 == 1) {
+    ledcAttachPin(motorA2, canalPWM);
+    ledcWrite(canalPWM, velocidade);
+    digitalWrite(motorA1, LOW);
+
+    ledcDetachPin(motorB1);
+    ledcDetachPin(motorB2);
+  }
   if (valorSensor1 == 0 && valorSensor2 == 0) {
     ledcAttachPin(motorA2, canalPWM);
     ledcWrite(canalPWM, velocidade);
@@ -239,29 +287,38 @@ void loop(void) {
     ledcWrite(canalPWM2, velocidade);
     digitalWrite(motorB2, LOW);
   }
+  */
+}
 
-  if (valorSensor1 == 1 && valorSensor2 == 1) {
-    ledcDetachPin(motorA1);
-    ledcDetachPin(motorA2);
-    ledcDetachPin(motorB1);
-    ledcDetachPin(motorB2);
-  }
+void leituraSensores() {
+  valorSensor1 = digitalRead(sensor1);  //se ler 1 = preto, se ler 0 = branco
+  valorSensor2 = digitalRead(sensor2);
+}
 
-  if (valorSensor1 == 0 && valorSensor2 == 1) {
-    ledcAttachPin(motorB1, canalPWM2);
-    ledcWrite(canalPWM2, velocidade);
-    digitalWrite(motorB2, LOW);
+void frente() {
+  ledcAttachPin(motorA2, canalPWM);
+  ledcWrite(canalPWM, velocidade);
+  digitalWrite(motorA1, LOW);
 
-    ledcDetachPin(motorA1);
-    ledcDetachPin(motorA2);
-  }
-  if (valorSensor1 == 1 && valorSensor2 == 0) {
-    ledcAttachPin(motorA2, canalPWM);
-    ledcWrite(canalPWM, velocidade);
-    digitalWrite(motorA1, LOW);
+  ledcAttachPin(motorB1, canalPWM2);
+  ledcWrite(canalPWM2, velocidade);
+  digitalWrite(motorB2, LOW);
+}
 
-    ledcDetachPin(motorB1);
-    ledcDetachPin(motorB2);
-  }
- 
+void esquerda() {
+  ledcAttachPin(motorB1, canalPWM2);
+  ledcWrite(canalPWM2, velocidade);
+  digitalWrite(motorB2, LOW);
+
+  digitalWrite(motorA1, 0);
+  digitalWrite(motorA2, 0);
+}
+
+void direita() {
+  ledcAttachPin(motorA1, canalPWM);
+  ledcWrite(canalPWM, velocidade);
+  digitalWrite(motorA2, LOW);
+
+  digitalWrite(motorB1, 0);
+  digitalWrite(motorB2, 0);
 }
