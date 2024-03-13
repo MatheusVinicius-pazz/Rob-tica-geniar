@@ -24,17 +24,20 @@ int sensor2 = 35;
 
 int valorSensor1;
 int valorSensor2;
+int velocidade = 70;
 
-int luminosidade = 30000;
+//int luminosidade = 30000;
 
-
+// config PWM motor3
 int freq = 30000;
 int canalPWM = 0;
 int resolution = 8;
 
+// config PWM motor2
 int freq2 = 30000;
 int canalPWM2 = 1;
 int resolution2 = 8;
+
 
 
 WebServer server(80);
@@ -223,38 +226,42 @@ void loop(void) {
 
 
 
-  Serial.println(valorSensor1);
-  Serial.println(valorSensor2);
-  delay(1000);
+  //Serial.println(valorSensor1);
+  //Serial.println(valorSensor2);
+  //delay(2000);
 
-  if (valorSensor1 == 1 && valorSensor2 == 1) {
+  if (valorSensor1 == 0 && valorSensor2 == 0) {
     ledcAttachPin(motorA2, canalPWM);
-    ledcWrite(canalPWM, 100);
+    ledcWrite(canalPWM, velocidade);
     digitalWrite(motorA1, LOW);
 
     ledcAttachPin(motorB1, canalPWM2);
-    ledcWrite(canalPWM2, 100);
+    ledcWrite(canalPWM2, velocidade);
     digitalWrite(motorB2, LOW);
   }
 
-  if (valorSensor1 == 0 && valorSensor2 == 1 ) {
+  if (valorSensor1 == 1 && valorSensor2 == 1) {
+    ledcDetachPin(motorA1);
+    ledcDetachPin(motorA2);
+    ledcDetachPin(motorB1);
+    ledcDetachPin(motorB2);
+  }
+
+  if (valorSensor1 == 0 && valorSensor2 == 1) {
     ledcAttachPin(motorB1, canalPWM2);
-    ledcWrite(canalPWM2, 100);
+    ledcWrite(canalPWM2, velocidade);
     digitalWrite(motorB2, LOW);
 
     ledcDetachPin(motorA1);
     ledcDetachPin(motorA2);
   }
-  if(valorSensor1 == 1 && valorSensor2 == 0){
+  if (valorSensor1 == 1 && valorSensor2 == 0) {
     ledcAttachPin(motorA2, canalPWM);
-    ledcWrite(canalPWM, 100);
+    ledcWrite(canalPWM, velocidade);
     digitalWrite(motorA1, LOW);
 
     ledcDetachPin(motorB1);
     ledcDetachPin(motorB2);
   }
-  // ledcDetachPin(motorA1);
-  //ledcDetachPin(motorA2);
-  //ledcDetachPin(motorB1);
-  //ledcDetachPin(motorB2);
+ 
 }
