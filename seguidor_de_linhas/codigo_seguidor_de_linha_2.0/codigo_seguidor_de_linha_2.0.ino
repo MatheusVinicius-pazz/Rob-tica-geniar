@@ -1,8 +1,8 @@
 /*
- * OTAWebUpdater.ino Example from ArduinoOTA Library
- * Rui Santos 
- * Complete Project Details https://randomnerdtutorials.com
- */
+   OTAWebUpdater.ino Example from ArduinoOTA Library
+   Rui Santos
+   Complete Project Details https://randomnerdtutorials.com
+*/
 
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -10,22 +10,19 @@
 #include <ESPmDNS.h>
 #include <Update.h>
 
-const char* host = "esp32";
-const char* ssid = "IFAL - Rio Largo";
-const char* password = "ifalriolargo";
 
 int motorA1 = 25;  //M1
-int motorA2 = 33;  //M1
+int motorA2 = 23;  //M2
 
-int motorB1 = 26;  //M2
-int motorB2 = 27;  //M2
+int motorB1 = 27;  //M2
+int motorB2 = 26;  //M2
 
 int sensor1 = 18;
 int sensor2 = 35;
 
 int valorSensor1;
 int valorSensor2;
-int velocidade = 80;
+int velocidade = 170;
 
 unsigned long ultimoTempo = 0;
 
@@ -62,16 +59,16 @@ void setup(void) {
 
   ledcWrite(canalPWM, 0);
   ledcWrite(canalPWM2, 0);
-  Serial.begin(115200);
+  Serial.begin(9600);
 }
 void loop(void) {
-  // server.handleClient();
-  // delay(1);
+
+
 
   if (millis() - ultimoTempo > 10) {
 
-    leituraSensores();  //sensores
-
+    //sensores
+    leituraSensores();
     if (valorSensor1 == 1 && valorSensor2 == 0) {  //sensor 1 no preto - sensor 2 branco => girar motor 1
       esquerda();
     }
@@ -87,6 +84,7 @@ void loop(void) {
     //parado();
 
     ultimoTempo = millis();
+
   }
 
 
@@ -95,61 +93,18 @@ void loop(void) {
   //Serial.println(valorSensor2);
   //delay(2000);
 
-  /*
-  if (valorSensor1 == 1 && valorSensor2 == 1) {
-    ledcAttachPin(motorA2, canalPWM);
-    ledcWrite(canalPWM, velocidade);
-    digitalWrite(motorA1, LOW);
+ 
 
-    ledcAttachPin(motorB1, canalPWM2);
-    ledcWrite(canalPWM2, velocidade);
-    digitalWrite(motorB2, LOW);
-  }
-
-  if (valorSensor1 == 0 && valorSensor2 == 0) {
-    ledcDetachPin(motorA1);
-    ledcDetachPin(motorA2);
-    ledcDetachPin(motorB1);
-    ledcDetachPin(motorB2);
-  }
-
-  if (valorSensor1 == 1 && valorSensor2 == 0) {
-    ledcAttachPin(motorB1, canalPWM2);
-    ledcWrite(canalPWM2, velocidade);
-    digitalWrite(motorB2, LOW);
-
-    ledcDetachPin(motorA1);
-    ledcDetachPin(motorA2);
-  }
-  if (valorSensor1 == 0 && valorSensor2 == 1) {
-    ledcAttachPin(motorA2, canalPWM);
-    ledcWrite(canalPWM, velocidade);
-    digitalWrite(motorA1, LOW);
-
-    ledcDetachPin(motorB1);
-    ledcDetachPin(motorB2);
-  }
-  if (valorSensor1 == 0 && valorSensor2 == 0) {
-    ledcAttachPin(motorA2, canalPWM);
-    ledcWrite(canalPWM, velocidade);
-    digitalWrite(motorA1, LOW);
-
-    ledcAttachPin(motorB1, canalPWM2);
-    ledcWrite(canalPWM2, velocidade);
-    digitalWrite(motorB2, LOW);
-  }
-  */
 }
-
 void leituraSensores() {
   valorSensor1 = digitalRead(sensor1);  //se ler 1 = preto, se ler 0 = branco
   valorSensor2 = digitalRead(sensor2);
 }
 
 void frente() {
-  ledcAttachPin(motorA2, canalPWM);
+  ledcAttachPin(motorA1, canalPWM);
   ledcWrite(canalPWM, velocidade);
-  digitalWrite(motorA1, LOW);
+  digitalWrite(motorA2, LOW);
 
   ledcAttachPin(motorB1, canalPWM2);
   ledcWrite(canalPWM2, velocidade);
@@ -165,7 +120,7 @@ void esquerda() {
   digitalWrite(motorA2, 0);
 }
 
-void direita(){
+void direita() {
   ledcAttachPin(motorA1, canalPWM);
   ledcWrite(canalPWM, velocidade);
   digitalWrite(motorA2, LOW);
