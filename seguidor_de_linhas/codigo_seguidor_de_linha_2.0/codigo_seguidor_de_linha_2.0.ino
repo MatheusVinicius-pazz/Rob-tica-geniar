@@ -68,18 +68,21 @@ void loop(void) {
   if (millis() - ultimoTempo > 10) {
 
     //sensores
+
     leituraSensores();
+     if(valorSensor1 == 1 && valorSensor2 == 1) {
+      frente();
+    }
+    
     if (valorSensor1 == 1 && valorSensor2 == 0) {  //sensor 1 no preto - sensor 2 branco => girar motor 1
       esquerda();
     }
 
-    else if (valorSensor1 == 0 && valorSensor2 == 1) {  //sensor 1 no preto - sensor 2 branco => girar motor 1
+    if (valorSensor1 == 0 && valorSensor2 == 1) {  //sensor 1 no preto - sensor 2 branco => girar motor 1
       direita();
     }
 
-    else {
-      frente();
-    }
+   
 
     //parado();
 
