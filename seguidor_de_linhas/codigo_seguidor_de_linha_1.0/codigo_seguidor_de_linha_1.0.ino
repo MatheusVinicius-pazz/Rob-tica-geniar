@@ -26,7 +26,7 @@ int valorSensor2;
 int velocidade = 130;
 
 
-//int luminosidade = 30000;
+
 
 // config PWM motor3
 int freq = 30000;
@@ -59,7 +59,7 @@ void setup() {
 
 }
 void loop() {
-  //delay(2000);
+
   valorSensor1 = !digitalRead(sensor1); // 1 ligado, 0 desligado.
   valorSensor2 = !digitalRead(sensor2); // 1 ligado, 0 desligado.
 
