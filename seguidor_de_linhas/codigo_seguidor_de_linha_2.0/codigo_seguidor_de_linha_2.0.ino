@@ -11,22 +11,27 @@
 #include <Update.h>
 
 
-int motorA1 = 25;  //M1
-int motorA2 = 23;  //M2
+int motorA1 = 22;
+int motorA2 = 23;
 
-int motorB1 = 27;  //M2
-int motorB2 = 26;  //M2
+int motorB1 = 18;
+int motorB2 = 19;
 
-int sensor1 = 18;
-int sensor2 = 35;
+int sensor1 = 13;
+int sensor2 = 12;
+int sensor3 = 14;
+int sensor4 = 27;
+int sensor5 = 26;
 
-int valorSensor1;
-int valorSensor2;
-int velocidade = 170;
+#define NUM_SENSOR 5
+int valorSensores[NUM_SENSOR];
 
-unsigned long ultimoTempo = 0;
 
-//int luminosidade = 30000;
+int velocidade = 140;
+
+//unsigned long ultimoTempo = 0;
+
+
 
 // config PWM motor3
 int freq = 30000;
@@ -43,7 +48,7 @@ int resolution2 = 8;
 
 
 
-void setup(void) {
+void setup() {
 
   pinMode(motorA1, OUTPUT);
   pinMode(motorA2, OUTPUT);
@@ -61,48 +66,33 @@ void setup(void) {
   ledcWrite(canalPWM2, 0);
   Serial.begin(9600);
 }
-void loop(void) {
-
-
-
-  if (millis() - ultimoTempo > 10) {
-
-    //sensores
-
-    leituraSensores();
-     if(valorSensor1 == 1 && valorSensor2 == 1) {
-      frente();
-    }
-    
-    if (valorSensor1 == 1 && valorSensor2 == 0) {  //sensor 1 no preto - sensor 2 branco => girar motor 1
-      esquerda();
-    }
-
-    if (valorSensor1 == 0 && valorSensor2 == 1) {  //sensor 1 no preto - sensor 2 branco => girar motor 1
-      direita();
-    }
-
-   
-
-    //parado();
-
-    ultimoTempo = millis();
-
-  }
-
-
-
-  //Serial.println(valorSensor1);
-  //Serial.println(valorSensor2);
-  //delay(2000);
-
- 
-
-}
 void leituraSensores() {
-  valorSensor1 = digitalRead(sensor1);  //se ler 1 = preto, se ler 0 = branco
-  valorSensor2 = digitalRead(sensor2);
+  valorSensores[0] = digitalRead(sensor1);
+  valorSensores[1] = digitalRead(sensor2);
+  valorSensores[2] = digitalRead(sensor3);
+  valorSensores[3] = digitalRead(sensor4);
+  valorSensores[4] = digitalRead(sensor5);
+    //se ler 1 = preto, se ler 0 = branco
+  
 }
+void loop() {
+
+leituraSensores();
+  
+  // Imprime os valores dos sensores
+  for (int i = 0; i < NUM_SENSOR; i++) {
+    Serial.print("Sensor ");
+    Serial.print(i + 1);
+    Serial.print(": ");
+    Serial.println(valorSensores[i]);
+  }
+  
+  delay(5000);
+
+
+
+}
+
 
 void frente() {
   ledcAttachPin(motorA1, canalPWM);
