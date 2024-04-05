@@ -4,11 +4,11 @@ int motorA2 = 13;
 int motorB1 = 13;
 int motorB2 = 11;
 
-int sensor1 = 6;
-int sensor2 = 9;
-int sensor3 = 10;
-int sensor4 = 11;
-int sensor5 = 5;
+int sensor0 = A0;
+int sensor1 = A1;
+int sensor2 = A2;
+int sensor3 = A3;
+int sensor4 = A4;
 
 #define NUM_SENSOR 5
 int valorSensores[NUM_SENSOR];
@@ -20,21 +20,22 @@ void setup() {
   pinMode(motorA2, OUTPUT);
   pinMode(motorB1, OUTPUT);
   pinMode(motorB2, OUTPUT);
+  
+  pinMode(sensor0, INPUT);
   pinMode(sensor1, INPUT);
   pinMode(sensor2, INPUT);
   pinMode(sensor3, INPUT);
   pinMode(sensor4, INPUT);
-  pinMode(sensor5, INPUT);
 
   Serial.begin(9600);
 }
 
 void leituraSensores() {
-  valorSensores[0] = digitalRead(sensor1);
-  valorSensores[1] = digitalRead(sensor2);
-  valorSensores[2] = digitalRead(sensor3);
-  valorSensores[3] = digitalRead(sensor4);
-  valorSensores[4] = digitalRead(sensor5);
+  valorSensores[0] = digitalRead(sensor0);
+  valorSensores[1] = digitalRead(sensor1);
+  valorSensores[2] = digitalRead(sensor2);
+  valorSensores[3] = digitalRead(sensor3);
+  valorSensores[4] = digitalRead(sensor4);
 }
 void frente() {
   analogWrite(motorA1, velocidade);
@@ -46,7 +47,7 @@ void frente() {
 void loop() {
   leituraSensores();
 
-  if(va
+  
 
 
 
@@ -54,7 +55,7 @@ void loop() {
 
 
   
-  /*
+
   // Imprime os valores dos sensores
   for (int i = 0; i < NUM_SENSOR; i++) {
     Serial.print("Sensor ");
@@ -64,7 +65,7 @@ void loop() {
   }
   
   delay(5000);
-  */
+  
 }
 
 

@@ -4,11 +4,7 @@
  * Complete Project Details https://randomnerdtutorials.com
  */
 
-#include <WiFi.h>
-#include <WiFiClient.h>
-#include <WebServer.h>
-#include <ESPmDNS.h>
-#include <Update.h>
+
 
 
 
@@ -19,7 +15,7 @@ int motorB1 = 25;  //M2
 int motorB2 = 23;  //M2
 
 int sensor1 = 18;
-int sensor2 = 35;
+int sensor2 = 34;
 
 int valorSensor1;
 int valorSensor2;
