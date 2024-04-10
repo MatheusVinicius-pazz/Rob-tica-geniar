@@ -2,26 +2,20 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
-const char* ssid = "IFAL - Rio Largo";
-const char* password = "ifalriolargo";
+//const char* ssid = "IFAL - Rio Largo";
+//const char* password = "ifalriolargo";
+
+const char* ssid = "Robô Fulano";
+const char* password = "12345678";
+
 
 int motorA1 = 25;
 int motorA2 = 33;
 int motorB1 = 27;
 int motorB2 = 26;
 
-/*
-int motorA1 = 13;
-int motorA2 = 12;
-int motorB1 = 14;
-int motorB2 = 27;
-*/
-
-
 int sensor1 = 18;
 int sensor2 = 34;
-
-
 
 const int freq = 30000;
 const int canalPWM = 1;
@@ -48,7 +42,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     .slider { -webkit-appearance: none; margin: 14px; width: 360px; height: 25px; background: #FFD65C;
       outline: none; -webkit-transition: .2s; transition: opacity .2s;}
     .slider::-webkit-slider-thumb {-webkit-appearance: none; appearance: none; width: 35px; height: 35px; background: #003249; cursor: pointer;}
-    .slider::-moz-range-thumb { width: 35px; height: 35px; background: #003249; cursor: pointer; } 
+    .slider::-moz-range-thumb { width: 35px; height: 35px; background: #003249; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -97,8 +91,11 @@ void setup() {
 
   // Função para reconectar ao WiFi
 
- 
-
+  WiFi.softAP(ssid);
+  IPAddress IP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(IP);
+/*
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
@@ -106,6 +103,7 @@ void setup() {
   }
 
   Serial.println(WiFi.localIP());
+*/
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
     request->send_P(200, "text/html", index_html, processor);
@@ -127,6 +125,7 @@ void setup() {
   });
 
   server.begin();
+  
 }
 
 void loop() {

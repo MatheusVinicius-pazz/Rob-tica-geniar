@@ -1,7 +1,7 @@
 int IN1 = 10;
 int IN2 = 9;
 int IN3 = 5;
-int IN4 = 6;
+int IN4 = A5;
 
 int sensor0 = A0;
 int sensor1 = A1;
@@ -9,8 +9,8 @@ int sensor2 = A2;
 int sensor3 = A3;
 int sensor4 = A4;
 
-int PWM_A = 2;
-int PWM_B = 4;
+int PWM_A = 6;
+int PWM_B = 12;
 
 int vel_A = 170;
 int vel_B = 170;
@@ -44,10 +44,10 @@ void setup() {
   Serial.begin(9600);
 }
 void frente() {
-  analogWrite(IN1, HIGH);
+ digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
 
-  analogWrite(IN3, HIGH);
+  digitalWrite(IN3, HIGH);
   digitalWrite(IN4, LOW);
 }
 void curva90_esquerda() {
@@ -56,19 +56,19 @@ void curva90_esquerda() {
 
   digitalWrite(IN3, HIGH);
   digitalWrite(IN4, LOW);
-  analogWrite(PWM_A, 0.90 * vel_A);
-  analogWrite(PWM_B, 0.90 * vel_B);
+  digitalWrite(PWM_A, 0.90 * vel_A);
+ digitalWrite(PWM_B, 0.90 * vel_B);
   delay(850);
 }
 
 void curva90_direita() {
-  analogWrite(IN1, HIGH);
+ digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
 
   analogWrite(IN3, HIGH);
   digitalWrite(IN4, LOW);
-  analogWrite(PWM_A, 0.1 * vel_A);
-  analogWrite(PWM_B, 0.80 * vel_B);
+  digitalWrite(PWM_A, 0.1 * vel_A);
+  digitalWrite(PWM_B, 0.80 * vel_B);
   delay(850);
 }
 
@@ -117,33 +117,33 @@ void calcula_PID() {
   erro_anterior = erro;
 }
 void controle_motor() {
-   if (PID >= 0) {
+  if (PID >= 0) {
     velesq = vel_B;
     veldir = vel_A - PID;
   } else {
     velesq = vel_B + PID;
     veldir = vel_A;
   }
-  analogWrite(IN1, HIGH);
+  digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, HIGH);
   digitalWrite(IN4, LOW);
-  analogWrite(PWM_A, veldir);
-  analogWrite(PWM_B, velesq);
+  digitalWrite(PWM_A, veldir);
+  digitalWrite(PWM_B, velesq);
 }
 
 
 void loop() {
 
- leituraSensores();
+  leituraSensores();
   calcula_erro();
   calcula_PID();
-  
+
   if (valorSensor[2] == 1) {
-    controle_motor(); // Chamando controle_motor() apenas se precisar seguir em frente
+    controle_motor();  // Chamando controle_motor() apenas se precisar seguir em frente
     frente();
   } else {
-    controle_motor(); // Chamando controle_motor() para ajustar as velocidades dos motores para curva
+    controle_motor();  // Chamando controle_motor() para ajustar as velocidades dos motores para curva
     if (PID > 0) {
       curva90_direita();
     } else {
@@ -151,5 +151,3 @@ void loop() {
     }
   }
 }
-
-
