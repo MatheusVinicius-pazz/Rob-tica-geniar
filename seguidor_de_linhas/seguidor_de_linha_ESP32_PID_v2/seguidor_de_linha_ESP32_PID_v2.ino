@@ -21,7 +21,9 @@ int s5 = 21;
 // Velocidade dos motores
 int velocidade = 0;
 String sliderValue = "0";
-
+String sliderKP = "0";
+String sliderKD = "0";
+String sliderKI = "0";
 const char* PARAM_INPUT = "value";
 
 const int freq = 30000;
@@ -30,9 +32,9 @@ const int canalPWM2 = 2;  // Segundo canal PWM
 const int resolution = 8;
 
 
-float Kp = 20.0;
+float Kp = 0.0;
 float Ki = 0.0;
-float Kd = 20.0;// 40.0;
+float Kd = 40.0;// 40.0;
 
 
 float I = 0, P = 0, D = 0, PID = 0;
@@ -59,8 +61,17 @@ const char index_html[] PROGMEM = R"rawliteral(
 </head>
 <body>
   <h2>ESP Web Server</h2>
+   <h3>Velocidade</h3>
   <p><span id="textSliderValue">%SLIDERVALUE%</span></p>
   <p><input type="range" onchange="updateSliderPWM(this)" id="pwmSlider" min="0" max="255" value="%SLIDERVALUE%" step="1" class="slider"></p>
+
+  <h3>KP</h3>
+  <p><span id="textSliderValueKP">%SLIDERVALUEKP%</span></p>
+  <p><input type="range" onchange="updateSliderKP(this)" id="pwmSliderKP" min="0" max="255" value="%SLIDERVALUEKP%" step="1" class="slider"></p>
+
+  <h3>KD</h3>
+  <p><span id="textSliderValueKD">%SLIDERVALUEKD%</span></p>
+  <p><input type="range" onchange="updateSliderKD(this)" id="pwmSliderKD" min="0" max="255" value="%SLIDERVALUEKD%" step="1" class="slider"></p>
 <script>
 function updateSliderPWM(element) {
   var sliderValue = document.getElementById("pwmSlider").value;
@@ -68,6 +79,24 @@ function updateSliderPWM(element) {
   console.log(sliderValue);
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "/slider?value="+sliderValue, true);
+  xhr.send();
+}
+
+function updateSliderKP(element) {
+  var sliderKP = document.getElementById("pwmSliderKP").value;
+  document.getElementById("textSliderValueKP").innerHTML = sliderKP;
+  console.log(sliderKP);
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "/sliderkp?value="+sliderKP, true);
+  xhr.send();
+}
+
+function updateSliderKD(element) {
+  var sliderKD = document.getElementById("pwmSliderKD").value;
+  document.getElementById("textSliderValueKD").innerHTML = sliderKD;
+  console.log(sliderKD);
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "/sliderkd?value="+sliderKD, true);
   xhr.send();
 }
 </script>
@@ -81,6 +110,18 @@ String processor(const String& var) {
   }
   return String();
 }
+String processorKP(const String& var) {
+  if (var == "SLIDERVALUEKP") {
+    return sliderKP;
+  }
+  return String();
+}
+String processorKD(const String& var) {
+  if (var == "SLIDERVALUEKD") {
+    return sliderKD;
+  }
+  return String();
+} 
 
 void setup() {
 
@@ -132,7 +173,39 @@ void setup() {
     } else {
       inputMessage = "No message sent";
     }
-    Serial.println(inputMessage);
+    Serial.println("MOTOR"+inputMessage);
+    request->send(200, "text/plain", "OK");
+  });
+  server.on("/sliderkp", HTTP_GET, [](AsyncWebServerRequest* request) {
+    String inputMessageKP;
+    if (request->hasParam(PARAM_INPUT)) {
+      inputMessageKP = request->getParam(PARAM_INPUT)->value();
+      sliderKP = inputMessageKP;
+      // Atribuir o valor de KP diretamente ao slider
+        Kp = sliderKP.toFloat();
+      // Definir velocidades diferentes para os motores
+      //ledcWrite(canalPWM, velocidade);
+      //ledcWrite(canalPWM2, velocidade);  
+    } else {
+      inputMessageKP = "No message sent";
+    }
+    Serial.println("KP:"+inputMessageKP);
+    request->send(200, "text/plain", "OK");
+  });
+   server.on("/sliderkd", HTTP_GET, [](AsyncWebServerRequest* request) {
+    String inputMessageKD;
+    if (request->hasParam(PARAM_INPUT)) {
+      inputMessageKD = request->getParam(PARAM_INPUT)->value();
+      sliderKD = inputMessageKD;
+          // Atribuir o valor de KP diretamente ao slider
+      Kd = sliderKD.toFloat();
+      // Definir velocidades diferentes para os motores
+      //ledcWrite(canalPWM, velocidade);
+       //ledcWrite(canalPWM2, velocidade);  
+    } else {
+      inputMessageKD = "No message sent";
+    }
+    Serial.println("KD:"+inputMessageKD);
     request->send(200, "text/plain", "OK");
   });
 
