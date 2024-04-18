@@ -1,4 +1,4 @@
-#include <WiFi.h>
+ #include <WiFi.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
@@ -19,7 +19,7 @@ int s4 = 18;
 int s5 = 21;
 
 // Velocidade dos motores
-int velocidade = 110;
+int velocidade = 140;
 String sliderValue = "0";
 String sliderKP = "0";
 String sliderKD = "0";
@@ -32,9 +32,9 @@ const int canalPWM2 = 2;  // Segundo canal PWM
 const int resolution = 8;
 
 
-float Kp = 25.0;
+float Kp = 60.0;
 float Ki = 0.0;
-float Kd = 25.0;// 40.0;
+float Kd = 120.0;// 40.0;
 
 
 float I = 0, P = 0, D = 0, PID = 0;
@@ -122,7 +122,7 @@ String processorKD(const String& var) {
     return sliderKD;
   }
   return String();
-} 
+}
 
 void setup() {
 
@@ -199,7 +199,7 @@ void setup() {
       inputMessageKD = request->getParam(PARAM_INPUT)->value();
       sliderKD = inputMessageKD;
           // Atribuir o valor de KP diretamente ao slider
-      //Kd = sliderKD.toFloat();
+     // Kd = sliderKD.toFloat();
       // Definir velocidades diferentes para os motores
       //ledcWrite(canalPWM, velocidade);
        //ledcWrite(canalPWM2, velocidade);  
@@ -211,7 +211,7 @@ void setup() {
   });
 
   server.begin();
-  
+ 
 }
 
 void loop() {
@@ -270,51 +270,21 @@ void funcaoPID() {
     // Define a direção dos motores
     if (velesq > 0) {
       analogWrite(motor1_A, velesq);
-      analogWrite(motor1_B, 0);
+      analogWrite(motor1_B, 60);
     } else {
-      analogWrite(motor1_A, 0);
+      analogWrite(motor1_A, 60);
       analogWrite(motor1_B, velesq);
-      //analogWrite(motor1_B, -velesq);
     }
 
     if (veldir > 0) {
       analogWrite(motor2_A, veldir);
-      analogWrite(motor2_B, 0);
+      analogWrite(motor2_B, 60);
     } else {
-      analogWrite(motor2_A, 0);
+      analogWrite(motor2_A, 60);
       analogWrite(motor2_B, veldir);
-      //analogWrite(motor2_B, -veldir);
     }
 
     ultimoTempo = millis();
 
   }
-}
-
-void frente() {
-  analogWrite(motor1_A, velocidade);
-  analogWrite(motor1_B, 0);
-  analogWrite(motor2_A, velocidade);
-  analogWrite(motor2_B, 0);
-}
-
-void frentezero() {
-  analogWrite(motor1_A, velocidade - 25);
-  analogWrite(motor1_B, 0);
-  analogWrite(motor2_A, velocidade - 25);
-  analogWrite(motor2_B, 0);
-}
-
-void esquerda() {
-  analogWrite(motor1_A, 0);
-  analogWrite(motor1_B, velocidade / 2.75);
-  analogWrite(motor2_A, velocidade / 2);
-  analogWrite(motor2_B, 0);
-}
-
-void direita() {
-  analogWrite(motor1_A, velocidade / 2);
-  analogWrite(motor1_B, 0);
-  analogWrite(motor2_A, 0);
-  analogWrite(motor2_B, velocidade / 2.75);
 }
